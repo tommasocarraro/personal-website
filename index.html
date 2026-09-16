@@ -1,0 +1,1467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tommaso Carraro, Ph.D. — Applied AI Scientist</title>
+<meta name="description" content="Tommaso Carraro, Ph.D. — Applied AI Scientist working on recommender systems, LLMs and agentic AI.">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================= */
+  /* Tokens                          */
+  /* ============================= */
+  :root{
+    --bg: #0a0a0f;
+    --bg-raised: #101018;
+    --bg-card: #12121c;
+    --line: rgba(255,255,255,0.08);
+    --line-bright: rgba(255,255,255,0.16);
+    --text: #e7e8ee;
+    --text-dim: #9a9ba8;
+    --text-faint: #6b6c7a;
+    --cyan: #4ff2ff;
+    --cyan-dim: #2bb6c2;
+    --violet: #9a6bff;
+    --violet-dim: #7048c9;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --maxw: 920px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+  }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  a{ color:inherit; }
+  ::selection{ background:var(--cyan); color:#04070a; }
+
+  img{ max-width:100%; display:block; }
+
+  .wrap{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding-inline: 24px;
+  }
+
+  h1,h2,h3{
+    font-family:var(--font-display);
+    font-weight:600;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+
+  /* Focus visibility */
+  a:focus-visible, button:focus-visible{
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* ============================= */
+  /* Background field                */
+  /* ============================= */
+  #field{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(79,242,255,0.07), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 85% 25%, rgba(154,107,255,0.08), transparent 60%),
+      var(--bg);
+  }
+  #particles{
+    position:absolute; inset:0;
+  }
+  .particle{
+    position:absolute;
+    width:2px; height:2px;
+    border-radius:50%;
+    background:var(--cyan);
+    opacity:0.35;
+    filter: drop-shadow(0 0 4px var(--cyan));
+    animation: drift linear infinite;
+  }
+  .particle.violet{ background:var(--violet); filter: drop-shadow(0 0 4px var(--violet)); }
+  @keyframes drift{
+    0%{ transform:translateY(0) translateX(0); opacity:0; }
+    10%{ opacity:0.5; }
+    90%{ opacity:0.5; }
+    100%{ transform:translateY(-120vh) translateX(20px); opacity:0; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .particle{ animation:none; opacity:0.15; }
+  }
+
+  /* ============================= */
+  /* Navbar                          */
+  /* ============================= */
+  #navbar{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(10,10,15,0.72);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  #navbar .inner{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:14px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .nav-mark{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:0.95rem;
+    color:var(--text);
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .nav-mark .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--cyan);
+    box-shadow:0 0 8px var(--cyan);
+  }
+  .nav-links{
+    display:flex;
+    gap:28px;
+    list-style:none;
+    margin:0; padding:0;
+  }
+  .nav-links a{
+    text-decoration:none;
+    color:var(--text-dim);
+    font-size:0.88rem;
+    font-weight:500;
+    position:relative;
+    padding-bottom:4px;
+    transition:color 0.2s ease;
+  }
+  .nav-links a::after{
+    content:'';
+    position:absolute;
+    left:0; bottom:0;
+    width:0%;
+    height:1px;
+    background:var(--cyan);
+    box-shadow:0 0 6px var(--cyan);
+    transition:width 0.25s ease;
+  }
+  .nav-links a:hover{ color:var(--text); }
+  .nav-links a.active{ color:var(--cyan); }
+  .nav-links a.active::after{ width:100%; }
+  #nav-toggle{ display:none; }
+
+  @media (max-width: 640px){
+    .nav-links{
+      position:fixed;
+      top:53px; right:0;
+      flex-direction:column;
+      background:var(--bg-raised);
+      border-left:1px solid var(--line);
+      border-bottom:1px solid var(--line);
+      padding:20px 28px;
+      gap:16px;
+      transform:translateX(100%);
+      transition:transform 0.3s ease;
+    }
+    .nav-links.open{ transform:translateX(0); }
+    #nav-toggle{
+      display:flex;
+      background:none;
+      border:1px solid var(--line);
+      border-radius:6px;
+      width:36px; height:32px;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      color:var(--text);
+    }
+  }
+
+  /* ============================= */
+  /* Sections shared                 */
+  /* ============================= */
+  section{
+    position:relative;
+    z-index:1;
+    padding:96px 0;
+    border-bottom:1px solid var(--line);
+  }
+  section:last-of-type{ border-bottom:none; }
+
+  .eyebrow-num{
+    font-family:var(--font-display);
+    font-size:0.8rem;
+    color:var(--cyan-dim);
+    margin-bottom:10px;
+    display:block;
+  }
+
+  .section-title{
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    margin-bottom:40px;
+  }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(18px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
+
+  /* ============================= */
+  /* Hero                            */
+  /* ============================= */
+  #hero{
+    min-height:92vh;
+    display:flex;
+    align-items:center;
+    padding-top:60px;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns: auto 1fr;
+    gap:44px;
+    align-items:center;
+  }
+  .hero-photo{
+    width:220px; height:220px;
+    border-radius:50%;
+    object-fit:cover;
+    border:1px solid var(--line-bright);
+    box-shadow: 0 0 0 6px rgba(79,242,255,0.05), 0 0 40px rgba(79,242,255,0.12);
+  }
+  .hero-name{
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height:1.1;
+    background: linear-gradient(120deg, #f2f3f8 40%, var(--cyan) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero-location{
+    color:var(--text-dim);
+    font-size:0.92rem;
+    margin-top:8px;
+  }
+  .terminal{
+    margin-top:22px;
+    font-family:'Space Grotesk', monospace;
+    font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+    color:var(--cyan);
+    min-height: 1.6em;
+    display:flex;
+    align-items:center;
+  }
+  .terminal .prompt{
+    color:var(--violet);
+    margin-right:10px;
+  }
+  .terminal .cursor{
+    display:inline-block;
+    width:9px; height:1.15em;
+    background:var(--cyan);
+    margin-left:4px;
+    box-shadow:0 0 6px var(--cyan);
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+  @media (prefers-reduced-motion: reduce){
+    .terminal .cursor{ animation:none; }
+  }
+
+  .hero-links{
+    margin-top:30px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .icon-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    text-decoration:none;
+    color:var(--text);
+    font-size:0.86rem;
+    font-weight:500;
+    padding:10px 16px;
+    border:1px solid var(--line-bright);
+    border-radius:8px;
+    background:rgba(255,255,255,0.02);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+  }
+  .icon-btn svg{ width:16px; height:16px; flex-shrink:0; }
+  .icon-btn:hover{
+    border-color:var(--cyan);
+    box-shadow:0 0 18px rgba(79,242,255,0.25);
+    transform:translateY(-2px);
+  }
+  .icon-btn.primary{
+    border-color:var(--violet);
+    background:rgba(154,107,255,0.08);
+  }
+  .icon-btn.primary:hover{
+    border-color:var(--violet);
+    box-shadow:0 0 18px rgba(154,107,255,0.32);
+  }
+
+  @media (max-width: 640px){
+    .hero-grid{
+      grid-template-columns: 1fr;
+      text-align:left;
+    }
+    .hero-photo{ width:150px; height:150px; }
+  }
+
+  /* ============================= */
+  /* Research interests chips        */
+  /* ============================= */
+  .chip-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .chip{
+    font-family:var(--font-display);
+    font-size:0.9rem;
+    padding:10px 18px;
+    border-radius:999px;
+    border:1px solid var(--line-bright);
+    color:var(--text-dim);
+    background:rgba(255,255,255,0.02);
+    transition: color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    cursor:default;
+  }
+  .chip:hover{
+    color:var(--cyan);
+    border-color:var(--cyan);
+    box-shadow:0 0 16px rgba(79,242,255,0.2);
+  }
+  .tech-row{
+    margin-top:36px;
+  }
+  .tech-label{
+    display:block;
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+    color:var(--text);
+    margin-bottom:16px;
+  }
+  .chip.tech{
+    font-family:var(--font-body);
+    font-size:0.82rem;
+    padding:8px 14px;
+    color:var(--text-faint);
+    border-color:var(--line);
+  }
+  .chip.tech:hover{
+    color:var(--violet);
+    border-color:var(--violet);
+    box-shadow:0 0 14px rgba(154,107,255,0.2);
+  }
+
+  /* ============================= */
+  /* About                           */
+  /* ============================= */
+  #about p{
+    color:var(--text-dim);
+    max-width: 74ch;
+    margin-bottom:22px;
+    font-size:1rem;
+  }
+  #about p:last-child{ margin-bottom:0; }
+  #about strong{ color:var(--text); font-weight:600; }
+
+  /* ============================= */
+  /* Publications                    */
+  /* ============================= */
+  .pub{
+    border:1px solid var(--line);
+    border-radius:10px;
+    margin-bottom:14px;
+    background:var(--bg-card);
+    overflow:hidden;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .pub.open{
+    border-color:var(--cyan);
+    box-shadow:0 0 24px rgba(79,242,255,0.15);
+  }
+  .pub-head{
+    width:100%;
+    background:none;
+    border:none;
+    color:inherit;
+    text-align:left;
+    padding:18px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .pub-title{
+    font-family:var(--font-display);
+    font-size:1rem;
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .pub-meta{
+    font-size:0.82rem;
+    color:var(--text-faint);
+  }
+  .pub-meta .pub-highlight{
+    color:var(--cyan);
+  }
+  .pub-chevron{
+    flex-shrink:0;
+    width:18px; height:18px;
+    color:var(--cyan-dim);
+    transition: transform 0.3s ease;
+  }
+  .pub.open .pub-chevron{ transform:rotate(180deg); color:var(--cyan); }
+
+  .pub-body{
+    max-height:0;
+    overflow:hidden;
+    transition: max-height 0.4s ease;
+  }
+  .pub.open .pub-body{ max-height:400px; }
+  .pub-body-inner{
+    padding:0 20px 22px;
+    border-top:1px solid var(--line);
+  }
+  .pub-abstract{
+    color:var(--text-dim);
+    font-size:0.9rem;
+    margin:16px 0 18px;
+  }
+  .pub-actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .pub-btn{
+    font-size:0.8rem;
+    font-weight:500;
+    padding:8px 14px;
+    border-radius:6px;
+    border:1px solid var(--line-bright);
+    background:transparent;
+    color:var(--text);
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:var(--font-body);
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .pub-btn:hover{ border-color:var(--cyan); color:var(--cyan); }
+  .pub-btn.copied{ border-color:var(--violet); color:var(--violet); }
+
+  /* ============================= */
+  /* Projects                        */
+  /* ============================= */
+  .project-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap:18px;
+  }
+  .project-card{
+    display:flex;
+    flex-direction:column;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:var(--bg-card);
+    padding:22px;
+    text-decoration:none;
+    color:inherit;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  }
+  .project-card:hover{
+    border-color:var(--cyan);
+    box-shadow:0 0 24px rgba(79,242,255,0.15);
+    transform:translateY(-3px);
+  }
+  .project-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:10px;
+  }
+  .project-title{
+    font-family:var(--font-display);
+    font-size:1.02rem;
+    font-weight:600;
+  }
+  .project-arrow{
+    flex-shrink:0;
+    width:16px; height:16px;
+    color:var(--cyan-dim);
+    transition: transform 0.25s ease, color 0.25s ease;
+  }
+  .project-card:hover .project-arrow{
+    transform:translate(3px,-3px);
+    color:var(--cyan);
+  }
+  .project-tag{
+    display:inline-block;
+    font-size:0.72rem;
+    color:var(--violet);
+    border:1px solid var(--violet-dim);
+    border-radius:999px;
+    padding:3px 10px;
+    margin-bottom:12px;
+    width:fit-content;
+  }
+  .project-desc{
+    color:var(--text-dim);
+    font-size:0.88rem;
+    flex-grow:1;
+  }
+
+  /* ============================= */
+  /* Carousel                        */
+  /* ============================= */
+  .carousel{
+    position:relative;
+    border-radius:12px;
+    overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .webinar-card{
+    border:1px solid var(--line);
+    border-radius:12px;
+    overflow:hidden;
+    background:var(--bg-card);
+  }
+  .video-embed{
+    position:relative;
+    aspect-ratio: 16 / 9;
+  }
+  .video-embed iframe{
+    position:absolute;
+    inset:0;
+    width:100%; height:100%;
+    border:0;
+  }
+  .webinar-info{
+    padding:24px;
+  }
+  .webinar-title{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:1.1rem;
+    margin-bottom:10px;
+  }
+  .webinar-desc{
+    color:var(--text-dim);
+    font-size:0.92rem;
+  }
+  .carousel-track{
+    position:relative;
+    aspect-ratio: 4 / 3;
+  }
+  .slide{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--bg-card);
+    opacity:0;
+    transition: opacity 0.8s ease;
+    z-index:0;
+  }
+  .slide.active{ opacity:1; z-index:1; }
+  .slide img{
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position:center;
+  }
+  .carousel-nav{
+    position:absolute;
+    top:50%; transform:translateY(-50%);
+    width:38px; height:38px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,0.25);
+    background:rgba(10,10,15,0.55);
+    backdrop-filter:blur(6px);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:2;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .carousel-nav:hover{ border-color:var(--cyan); box-shadow:0 0 14px rgba(79,242,255,0.3); }
+  .carousel-nav.prev{ left:14px; }
+  .carousel-nav.next{ right:14px; }
+  .carousel-dots{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin-top:14px;
+  }
+  .carousel-dots button{
+    width:7px; height:7px;
+    border-radius:50%;
+    border:none;
+    background:var(--line-bright);
+    cursor:pointer;
+    padding:0;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+  }
+  .carousel-dots button.active{
+    background:var(--cyan);
+    box-shadow:0 0 6px var(--cyan);
+  }
+  .carousel-caption{
+    text-align:center;
+    color:var(--text-dim);
+    font-size:0.88rem;
+    margin-top:14px;
+  }
+
+  /* ============================= */
+  /* Awards                          */
+  /* ============================= */
+  .award-list{
+    display:flex;
+    flex-direction:column;
+    gap:0;
+    border-left:1px solid var(--line-bright);
+    margin-left:6px;
+  }
+  .award{
+    position:relative;
+    padding:4px 0 28px 28px;
+  }
+  .award:last-child{ padding-bottom:4px; }
+  .award::before{
+    content:'';
+    position:absolute;
+    left:-5px; top:6px;
+    width:9px; height:9px;
+    border-radius:50%;
+    background:var(--bg);
+    border:2px solid var(--cyan);
+    box-shadow:0 0 8px var(--cyan);
+  }
+  .award-year{
+    font-family:var(--font-display);
+    color:var(--cyan-dim);
+    font-size:0.82rem;
+    margin-bottom:4px;
+  }
+  .award-title{
+    font-weight:600;
+    margin-bottom:4px;
+  }
+  .award-desc{
+    color:var(--text-dim);
+    font-size:0.9rem;
+  }
+
+  /* ============================= */
+  /* Contact                         */
+  /* ============================= */
+  #contact{
+    text-align:center;
+    padding-bottom:100px;
+  }
+  #contact .section-title{ margin-bottom:8px; }
+  #contact .sub{
+    color:var(--text-dim);
+    margin-bottom:32px;
+  }
+  .contact-icons{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    margin-bottom:28px;
+  }
+  .contact-icons a{
+    width:46px; height:46px;
+    border-radius:50%;
+    border:1px solid var(--line-bright);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    color:var(--text);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+  }
+  .contact-icons a:hover{
+    border-color:var(--cyan);
+    box-shadow:0 0 16px rgba(79,242,255,0.25);
+    transform:translateY(-2px);
+  }
+  .contact-icons svg{ width:19px; height:19px; }
+  .references-note{
+    color:var(--text-faint);
+    font-size:0.85rem;
+  }
+
+  footer{
+    text-align:center;
+    padding:26px 0 46px;
+    color:var(--text-faint);
+    font-size:0.8rem;
+    position:relative;
+    z-index:1;
+  }
+</style>
+</head>
+<body>
+
+<div id="field"><div id="particles"></div></div>
+
+<!-- ============================= -->
+<!-- Navbar                          -->
+<!-- ============================= -->
+<header id="navbar">
+  <div class="inner">
+    <a href="#hero" class="nav-mark"><span class="dot"></span>Tommaso Carraro</a>
+    <button id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about" data-nav>About</a></li>
+      <li><a href="#projects" data-nav>Projects</a></li>
+      <li><a href="#publications" data-nav>Publications</a></li>
+      <li><a href="#webinars" data-nav>Webinars</a></li>
+      <li><a href="#gallery" data-nav>Gallery</a></li>
+      <li><a href="#awards" data-nav>Awards</a></li>
+      <li><a href="#contact" data-nav>Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- ============================= -->
+<!-- Hero                            -->
+<!-- ============================= -->
+<section id="hero">
+  <div class="wrap hero-grid">
+    <img class="hero-photo" src="images/my_pic.jpeg" alt="Portrait of Tommaso Carraro">
+    <div>
+      <h1 class="hero-name">Tommaso Carraro, Ph.D.</h1>
+      <div class="hero-location">Padova, Italy</div>
+      <div class="terminal" id="terminal" aria-live="polite">
+        <span class="prompt">&gt;</span><span id="terminal-text"></span><span class="cursor" aria-hidden="true"></span>
+      </div>
+      <div class="hero-links">
+        <a class="icon-btn" href="https://scholar.google.com/citations?user=hy1cRN8AAAAJ" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 1 9l11 7 9-5.64V17h2V9L12 2zM5 13.18v4.1c0 1 3.27 3.72 7 3.72s7-2.72 7-3.72v-4.1L12 18 5 13.18z"/></svg>
+          Google Scholar
+        </a>
+        <a class="icon-btn" href="https://www.linkedin.com/in/tommaso-carraro/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+          LinkedIn
+        </a>
+        <a class="icon-btn" href="https://github.com/tommasocarraro" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.2c0 4.49 2.87 8.3 6.84 9.64.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.72-2.78.62-3.37-1.37-3.37-1.37-.46-1.2-1.11-1.52-1.11-1.52-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.9 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.64-1.37-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 2.5-.35c.85 0 1.71.12 2.5.35 1.91-1.33 2.75-1.05 2.75-1.05.55 1.42.2 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.49A10.21 10.21 0 0 0 22 12.2C22 6.58 17.52 2 12 2z"/></svg>
+          GitHub
+        </a>
+        <a class="icon-btn primary" href="cv/cv_tommaso.pdf" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>
+          Download CV
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= -->
+<!-- Research interests              -->
+<!-- ============================= -->
+<section id="interests">
+  <div class="wrap reveal">
+    <span class="eyebrow-num">Focus areas</span>
+    <h2 class="section-title">Research interests</h2>
+    <div class="chip-row">
+      <span class="chip">Recommender Systems</span>
+      <span class="chip">Large Language Models</span>
+      <span class="chip">Agentic AI</span>
+      <span class="chip">Neuro-Symbolic AI</span>
+    </div>
+
+    <div class="tech-row">
+      <span class="tech-label">Tools I build with</span>
+      <div class="chip-row">
+        <span class="chip tech">PyTorch</span>
+        <span class="chip tech">LangChain</span>
+        <span class="chip tech">Ollama</span>
+        <span class="chip tech">vLLM</span>
+        <span class="chip tech">Qdrant</span>
+        <span class="chip tech">Claude Code</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= -->
+<!-- About                           -->
+<!-- ============================= -->
+<section id="about">
+  <div class="wrap reveal">
+    <span class="eyebrow-num">Background</span>
+    <h2 class="section-title">About</h2>
+    <p>My passion for research started during my Master Degree at the University of Padova, with a project on Variational Autoencoders for top-N recommendation that became my first publication, at UMAP 2020. In 2021, after a year at Fondazione Bruno Kessler in Trento, I began a Ph.D. in Computer Science at the University of Padova, supervised by Prof. Fabio Aiolli (University of Padova) and Luciano Serafini (Fondazione Bruno Kessler).</p>
+    <p>The Ph.D. centered on Neuro-Symbolic AI for recommender systems &mdash; combining neural networks with symbolic reasoning to tackle cold-start, data sparsity, and explainability. Along the way I published at ICANN, NeSy, ECIR, RecSys, and NeurIPS, spent a research period at the WISE Lab, Rutgers University (with Prof. Yongfeng Zhang), and won the Best Doctoral Consortium Paper Award at AIxIA 2023.</p>
+    <p>After graduating, I spent a year at Sony Research India and three months at Disney Research Zurich, both building LLM-powered recommender systems &mdash; an agentic recommendation system for Sony LIV, and a zero-shot LLM reranker for Disney+.</p>
+  </div>
+</section>
+
+<!-- ============================= -->
+<!-- Projects                        -->
+<!-- ============================= -->
+<section id="projects">
+  <div class="wrap reveal">
+    <span class="eyebrow-num">Things I've built</span>
+    <h2 class="section-title">Projects</h2>
+
+    <div class="project-grid">
+      <a class="project-card" href="https://github.com/tommasocarraro/ltntorch" target="_blank" rel="noopener">
+        <div class="project-head">
+          <span class="project-title">LTNTorch</span>
+          <svg class="project-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg>
+        </div>
+        <span class="project-tag">Neuro-Symbolic AI</span>
+        <p class="project-desc">PyTorch port of Logic Tensor Networks, a neuro-symbolic framework that grounds first-order logic in neural networks through fuzzy semantics. I led the migration from the original TensorFlow codebase, making LTN easy to drop into modern PyTorch pipelines &mdash; it's now the version most of the neuro-symbolic community builds on.</p>
+      </a>
+
+      <a class="project-card" href="https://github.com/tommasocarraro-sony/recsys-agent" target="_blank" rel="noopener">
+        <div class="project-head">
+          <span class="project-title">Sony LIV Recommendation Agent</span>
+          <svg class="project-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg>
+        </div>
+        <span class="project-tag">LLM Agents &middot; RecSys</span>
+        <p class="project-desc">An end-to-end conversational recommendation agent for the Sony LIV streaming platform. It combines RAG over movie plots (Qdrant), SQL-based metadata lookup, and a collaborative-filtering backbone for personalization, orchestrated through tool calling so it can handle compound queries such as plot details plus a minimum rating. Reached PoC, was presented to stakeholders at Sony STEF Tokyo, secured further investment, and was published at ACM RecSys 2025.</p>
+      </a>
+
+      <a class="project-card" href="https://github.com/tommasocarraro/zurich-guide-agent" target="_blank" rel="noopener">
+        <div class="project-head">
+          <span class="project-title">Zurich Guide Agent</span>
+          <svg class="project-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg>
+        </div>
+        <span class="project-tag">Personal project</span>
+        <p class="project-desc">A conversational agent that recommends places and plans itineraries around Zurich based on real-time context (user location and time). It integrates with external APIs to retrieve places, weather, and to perform web searches. Built in my free time to experiment with agentic tool-use and retrieval outside of a research setting.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= -->
+<!-- Publications                    -->
+<!-- ============================= -->
+<section id="publications">
+  <div class="wrap reveal">
+    <span class="eyebrow-num">Selected work</span>
+    <h2 class="section-title">Publications</h2>
+
+    <div id="pub-list">
+      <article class="pub" data-bibtex="@inproceedings{carraro2025llmagents,
+  title={Large Language Model-based Recommendation System Agents},
+  author={Carraro, Tommaso and Singh, Brijraj and Pedanekar, Niranjan},
+  booktitle={Proceedings of the 19th ACM Conference on Recommender Systems (RecSys '25)},
+  pages={1340--1342},
+  year={2025}
+}">
+        <button class="pub-head" aria-expanded="false">
+          <div>
+            <div class="pub-title">Large Language Model-based Recommendation System Agents</div>
+            <div class="pub-meta"><span class="pub-highlight">Tommaso Carraro</span>, Brijraj Singh, Niranjan Pedanekar &middot; ACM Conference on Recommender Systems (<span class="pub-highlight">RecSys</span>) &middot; 2025</div>
+          </div>
+          <svg class="pub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="pub-body">
+          <div class="pub-body-inner">
+            <p class="pub-abstract">A Large Language Model-based agent is an AI assistant that makes use of advanced Tool Calling (TC) and Retrieval Augmented Generation (RAG) techniques to access external tools (e.g., Python code, databases). This allows the agent to consult additional sources of information that are complementary to its pre-trained knowledge.</p>
+            <div class="pub-actions">
+              <a class="pub-btn" href="https://dl.acm.org/doi/full/10.1145/3705328.3759334" target="_blank" rel="noopener">Open Paper</a>
+              <button class="pub-btn copy-bib" type="button">Copy BibTeX</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub" data-bibtex="@inproceedings{bortolotti2024rsbench,
+  title={A Neuro-Symbolic Benchmark Suite for Concept Quality and Reasoning Shortcuts},
+  author={Bortolotti, Samuele and Marconato, Emanuele and Carraro, Tommaso and Morettin, Paolo and van Krieken, Emile and Vergari, Antonio and Teso, Stefano and Passerini, Andrea},
+  booktitle={Advances in Neural Information Processing Systems (NeurIPS), Datasets and Benchmarks Track},
+  volume={37},
+  year={2024}
+}">
+        <button class="pub-head" aria-expanded="false">
+          <div>
+            <div class="pub-title">A Neuro-Symbolic Benchmark Suite for Concept Quality and Reasoning Shortcuts</div>
+            <div class="pub-meta">Samuele Bortolotti, Emanuele Marconato, <span class="pub-highlight">Tommaso Carraro</span>, Paolo Morettin, Emile van Krieken, Antonio Vergari, Stefano Teso, Andrea Passerini &middot; Annual Conference on Neural Information Processing Systems (<span class="pub-highlight">NeurIPS</span>) &middot; 2024</div>
+          </div>
+          <svg class="pub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="pub-body">
+          <div class="pub-body-inner">
+            <p class="pub-abstract">We introduce rsbench, a benchmark suite designed to evaluate reasoning shortcuts (RSs): predictors that solve the downstream reasoning task without associating the correct concepts to the high-dimensional data. The benchmark provides customizable tasks and metrics for assessing concept quality in neural and neuro-symbolic models, and results show that achieving high-quality concepts remains an unresolved challenge across both approaches.</p>
+            <div class="pub-actions">
+              <a class="pub-btn" href="https://proceedings.neurips.cc/paper_files/paper/2024/hash/d1d11bf8299334d354949ba8738e8301-Abstract-Datasets_and_Benchmarks_Track.html" target="_blank" rel="noopener">Open Paper</a>
+              <button class="pub-btn copy-bib" type="button">Copy BibTeX</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub" data-bibtex="@article{carraro2024ltntorch,
+  title={LTNtorch: PyTorch Implementation of Logic Tensor Networks},
+  author={Carraro, Tommaso and Serafini, Luciano and Aiolli, Fabio},
+  journal={arXiv preprint arXiv:2409.16045},
+  year={2024}
+}">
+        <button class="pub-head" aria-expanded="false">
+          <div>
+            <div class="pub-title">LTNtorch: PyTorch Implementation of Logic Tensor Networks</div>
+            <div class="pub-meta"><span class="pub-highlight">Tommaso Carraro</span>, Luciano Serafini, Fabio Aiolli &middot; <span class="pub-highlight">arXiv</span> preprint &middot; 2024</div>
+          </div>
+          <svg class="pub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="pub-body">
+          <div class="pub-body-inner">
+            <p class="pub-abstract">Logic Tensor Networks are a neuro-symbolic framework combining deep learning with logical reasoning. LTNtorch is the fully documented and tested PyTorch implementation of Logic Tensor Networks, enabling users to define logical knowledge bases as neural model objectives and learn through logical reasoning via gradient descent. The framework uses fuzzy logic to enable continuous truth values, making training via backpropagation feasible.</p>
+            <div class="pub-actions">
+              <a class="pub-btn" href="https://arxiv.org/abs/2409.16045" target="_blank" rel="noopener">Open Paper</a>
+              <button class="pub-btn copy-bib" type="button">Copy BibTeX</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub" data-bibtex="@inproceedings{carraro2024mitigating,
+  title={Mitigating Data Sparsity via Neuro-Symbolic Knowledge Transfer},
+  author={Carraro, Tommaso and Daniele, Alessandro and Aiolli, Fabio and Serafini, Luciano},
+  booktitle={Advances in Information Retrieval: 46th European Conference on Information Retrieval (ECIR)},
+  pages={226--242},
+  year={2024}
+}">
+        <button class="pub-head" aria-expanded="false">
+          <div>
+            <div class="pub-title">Mitigating Data Sparsity via Neuro-Symbolic Knowledge Transfer</div>
+            <div class="pub-meta"><span class="pub-highlight">Tommaso Carraro</span>, Alessandro Daniele, Fabio Aiolli, Luciano Serafini &middot; European Conference on Information Retrieval (<span class="pub-highlight">ECIR</span>) &middot; 2024</div>
+          </div>
+          <svg class="pub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="pub-body">
+          <div class="pub-body-inner">
+            <p class="pub-abstract">Data sparsity is a well-known historical limitation of recommender systems that still impacts the performance of state-of-the-art approaches. We propose a novel Neuro-Symbolic approach for knowledge transfer in recommender systems, using a Logic Tensor Network (LTN) to train a vanilla Matrix Factorization model for rating prediction. The benefits of the acquired knowledge increase with the sparsity of the dataset, showing the importance of exploiting knowledge from a denser source domain when training data is scarce in the target domain.</p>
+            <div class="pub-actions">
+              <a class="pub-btn" href="https://link.springer.com/chapter/10.1007/978-3-031-56063-7_15" target="_blank" rel="noopener">Open Paper</a>
+              <button class="pub-btn copy-bib" type="button">Copy BibTeX</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub" data-bibtex="@inproceedings{carraro2023overcoming,
+  title={Overcoming Recommendation Limitations with Neuro-Symbolic Integration},
+  author={Carraro, Tommaso},
+  booktitle={Proceedings of the 17th ACM Conference on Recommender Systems (RecSys '23)},
+  pages={1325--1331},
+  year={2023}
+}">
+        <button class="pub-head" aria-expanded="false">
+          <div>
+            <div class="pub-title">Overcoming Recommendation Limitations with Neuro-Symbolic Integration</div>
+            <div class="pub-meta"><span class="pub-highlight">Tommaso Carraro</span> &middot; ACM Conference on Recommender Systems (<span class="pub-highlight">RecSys</span>) &middot; 2023</div>
+          </div>
+          <svg class="pub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="pub-body">
+          <div class="pub-body-inner">
+            <p class="pub-abstract">Recommender Systems still suffer from important issues that limit their applicability in real-world scenarios, with data sparsity, cold start, and explainability among the most impacting problems. These historical limitations can be mitigated by injecting prior knowledge into recommendation models. This work shows how Neuro-Symbolic integration via Logic Tensor Networks (LTN) can be used to regularize models, perform cross-domain recommendation, ensemble learning, and explainable recommendation, and to reduce popularity bias.</p>
+            <div class="pub-actions">
+              <a class="pub-btn" href="https://dl.acm.org/doi/abs/10.1145/3604915.3608876" target="_blank" rel="noopener">Open Paper</a>
+              <button class="pub-btn copy-bib" type="button">Copy BibTeX</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub" data-bibtex="@inproceedings{carraro2023ltnrec,
+  title={Logic Tensor Networks for Top-N Recommendation},
+  author={Carraro, Tommaso and Daniele, Alessandro and Aiolli, Fabio and Serafini, Luciano},
+  booktitle={AIxIA 2022 -- Advances in Artificial Intelligence},
+  year={2023}
+}">
+        <button class="pub-head" aria-expanded="false">
+          <div>
+            <div class="pub-title">Logic Tensor Networks for Top-N Recommendation</div>
+            <div class="pub-meta"><span class="pub-highlight">Tommaso Carraro</span>, Alessandro Daniele, Fabio Aiolli, Luciano Serafini &middot; International Conference of the Italian Association for Artificial Intelligence (<span class="pub-highlight">AIxIA</span>) &ndash; 2023</div>
+          </div>
+          <svg class="pub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="pub-body">
+          <div class="pub-body-inner">
+            <p class="pub-abstract">State-of-the-art recommender systems still suffer from important drawbacks which limit their usage in real-world scenarios, among them data sparsity and the cold-start problem. We propose to use Logic Tensor Networks (LTNs) to tackle the top-N item recommendation problem, showing how LTN can be used to easily and effectively inject commonsense recommendation knowledge into a recommender system. We evaluate our method on MindReader, a knowledge graph-based movie recommendation dataset, showing that the benefits of the injected knowledge increase with the sparsity of the dataset.</p>
+            <div class="pub-actions">
+              <a class="pub-btn" href="https://link.springer.com/chapter/10.1007/978-3-031-27181-6_8" target="_blank" rel="noopener">Open Paper</a>
+              <button class="pub-btn copy-bib" type="button">Copy BibTeX</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub" data-bibtex="@inproceedings{carraro2022cvae,
+  title={Conditioned Variational Autoencoder for Top-N Item Recommendation},
+  author={Carraro, Tommaso and Polato, Mirko and Bergamin, Luca and Aiolli, Fabio},
+  booktitle={Artificial Neural Networks and Machine Learning -- ICANN 2022},
+  year={2022}
+}">
+        <button class="pub-head" aria-expanded="false">
+          <div>
+            <div class="pub-title">Conditioned Variational Autoencoder for Top-N Item Recommendation</div>
+            <div class="pub-meta"><span class="pub-highlight">Tommaso Carraro</span>, Mirko Polato, Luca Bergamin, Fabio Aiolli &middot; International Conference on Artificial Neural Networks (<span class="pub-highlight">ICANN</span>) &middot; 2022</div>
+          </div>
+          <svg class="pub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="pub-body">
+          <div class="pub-body-inner">
+            <p class="pub-abstract">State-of-the-art recommender systems generally try to improve overall recommendation quality, but users often tend to explicitly filter the item set based on available categories (e.g., movie genres). We propose a Conditioned Variational Autoencoder (C-VAE) for constrained top-N item recommendation, where a condition vector is fed into the encoder and a new reconstruction loss takes the input condition into account. The model generalizes the state-of-the-art Mult-VAE collaborative filtering model, and experiments underline its potential for providing accurate recommendations under constraints.</p>
+            <div class="pub-actions">
+              <a class="pub-btn" href="https://link.springer.com/chapter/10.1007/978-3-031-15931-2_64" target="_blank" rel="noopener">Open Paper</a>
+              <button class="pub-btn copy-bib" type="button">Copy BibTeX</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub" data-bibtex="@inproceedings{bergamin2022vabc,
+  title={Novel Applications for VAE-based Anomaly Detection Systems},
+  author={Bergamin, Luca and Carraro, Tommaso and Polato, Mirko and Aiolli, Fabio},
+  booktitle={International Joint Conference on Neural Networks (IJCNN)},
+  year={2022}
+}">
+        <button class="pub-head" aria-expanded="false">
+          <div>
+            <div class="pub-title">Novel Applications for VAE-based Anomaly Detection Systems</div>
+            <div class="pub-meta">Luca Bergamin, <span class="pub-highlight">Tommaso Carraro</span>, Mirko Polato, Fabio Aiolli &middot; International Joint Conference on Neural Networks (<span class="pub-highlight">IJCNN</span>) &middot; 2022</div>
+          </div>
+          <svg class="pub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="pub-body">
+          <div class="pub-body-inner">
+            <p class="pub-abstract">Deep generative modeling enables new research directions but also raises ethical issues, as misuse can enable disinformation campaigns and phishing attempts, and biases in deep learning models can lead to misrepresentation. We formulate a novel setting to address these problems, showing that a repurposed anomaly detection system can effectively generate novel data while avoiding the generation of specified unwanted data. We propose Variational Auto-encoding Binary Classifiers (V-ABC), a model that repurposes and extends the Auto-encoding Binary Classifier anomaly detector using a Variational Autoencoder.</p>
+            <div class="pub-actions">
+              <a class="pub-btn" href="https://ieeexplore.ieee.org/abstract/document/9892879" target="_blank" rel="noopener">Open Paper</a>
+              <button class="pub-btn copy-bib" type="button">Copy BibTeX</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub" data-bibtex="@article{aiolli2022bayes,
+  title={Bayes Point Rule Set Learning},
+  author={Aiolli, Fabio and Bergamin, Luca and Carraro, Tommaso and Polato, Mirko},
+  journal={arXiv preprint arXiv:2204.05251},
+  year={2022}
+}">
+        <button class="pub-head" aria-expanded="false">
+          <div>
+            <div class="pub-title">Bayes Point Rule Set Learning</div>
+            <div class="pub-meta">Fabio Aiolli, Luca Bergamin, <span class="pub-highlight">Tommaso Carraro</span>, Mirko Polato &middot; European Symposium on Artificial Neural Networks, Computational Intelligence and Machine Learning (<span class="pub-highlight">ESANN</span>) &middot; 2022</div>
+          </div>
+          <svg class="pub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="pub-body">
+          <div class="pub-body-inner">
+            <p class="pub-abstract">Interpretability is having an increasingly important role in the design of machine learning algorithms, though interpretable methods tend to be less accurate than their black-box counterparts. We propose an effective bottom-up extension of the FIND-S algorithm to learn DNF-type rulesets, greedily finding a partition of the positive examples into conjunctive rules. We also propose two principled extensions that approximate the Bayes Optimal Classifier by aggregating decision rules, along with a methodology to significantly improve explainability while retaining generalization capabilities.</p>
+            <div class="pub-actions">
+              <a class="pub-btn" href="https://arxiv.org/abs/2204.05251" target="_blank" rel="noopener">Open Paper</a>
+              <button class="pub-btn copy-bib" type="button">Copy BibTeX</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="pub" data-bibtex="@inproceedings{carraro2020blackbox,
+  title={A Look Inside the Black-Box: Towards the Interpretability of Conditioned Variational Autoencoder for Collaborative Filtering},
+  author={Carraro, Tommaso and Polato, Mirko and Aiolli, Fabio},
+  booktitle={Adjunct Publication of the 28th ACM Conference on User Modeling, Adaptation and Personalization (UMAP '20 Adjunct)},
+  pages={233--236},
+  year={2020}
+}">
+        <button class="pub-head" aria-expanded="false">
+          <div>
+            <div class="pub-title">A Look Inside the Black-Box: Towards the Interpretability of Conditioned Variational Autoencoder for Collaborative Filtering</div>
+            <div class="pub-meta"><span class="pub-highlight">Tommaso Carraro</span>, Mirko Polato, Fabio Aiolli &middot; ACM Conference on User Modeling, Adaptation and Personalization (<span class="pub-highlight">UMAP</span>), Adjunct &middot; 2020</div>
+          </div>
+          <svg class="pub-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="pub-body">
+          <div class="pub-body-inner">
+            <p class="pub-abstract">Deep learning-based recommender systems currently lack explainability. We take a step toward filling this gap by providing an intuitive interpretation of the inner representation of a conditioned variational autoencoder (C-VAE) for collaborative filtering. The interpretation is performed visually, by plotting the principal components of the model's latent space learned on MovieLens data, showing that conditions on correlated genres map users into close clusters that enable the model to be used for profiling purposes.</p>
+            <div class="pub-actions">
+              <a class="pub-btn" href="https://dl.acm.org/doi/abs/10.1145/3386392.3399305" target="_blank" rel="noopener">Open Paper</a>
+              <button class="pub-btn copy-bib" type="button">Copy BibTeX</button>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= -->
+<!-- Webinars                        -->
+<!-- ============================= -->
+<section id="webinars">
+  <div class="wrap reveal">
+    <span class="eyebrow-num">Talks</span>
+    <h2 class="section-title">Webinars</h2>
+
+    <div class="webinar-card">
+      <div class="video-embed">
+        <iframe src="https://www.youtube.com/embed/eQqDRi1q3Zs" title="Recommendation Systems — Lecture 006" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+      </div>
+      <div class="webinar-info">
+        <div class="webinar-title">Recommendation Systems — Lecture 006</div>
+        <p class="webinar-desc">A guest lecture covering the foundations of Recommendation Systems &mdash; core concepts, data representation, matrix factorization, and a look at where the field is headed &mdash; presented as part of a lecture series while I was a third-year Ph.D. student at the University of Padova / Fondazione Bruno Kessler.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= -->
+<!-- Gallery / Carousel              -->
+<!-- ============================= -->
+<section id="gallery">
+  <div class="wrap reveal">
+    <span class="eyebrow-num">Moments</span>
+    <h2 class="section-title">Gallery</h2>
+
+    <div class="carousel">
+      <div class="carousel-track" id="carousel-track">
+        <div class="slide active"><img src="images/best_paper_AIxIA_2023_Rome.jpeg" alt="Receiving the Best Doctoral Consortium Paper Award at AIxIA 2023, Rome" loading="lazy"></div>
+        <div class="slide"><img src="images/me_presenting_RecSys_2023_Singapore.jpeg" alt="Presenting my work at RecSys 2023, Singapore" loading="lazy"></div>
+        <div class="slide"><img src="images/poster_presentation_recsys_2023_Singapore.jpg" alt="Poster presentation at RecSys 2023, Singapore" loading="lazy"></div>
+        <div class="slide"><img src="images/Having_fun_at_RecSys_2023_Singapore.jpeg" alt="Having fun with colleagues at RecSys 2023, Singapore" loading="lazy"></div>
+        <div class="slide"><img src="images/group_photo_ngi_enrichers_bootcamp_2024_Rome.jpeg" alt="NGI Enrichers Fellowship bootcamp, Rome, 2024" loading="lazy"></div>
+        <div class="slide"><img src="images/me_and_jhonatan_times_square_ngi_enrichers_2024_NYC.jpeg" alt="With Jhonatan in Times Square during the NGI Enrichers Fellowship, New York, 2024" loading="lazy"></div>
+        <div class="slide"><img src="images/me_presenting_at_nesy_2024_Barcelona.jpeg" alt="Presenting at NeSy 2024, Barcelona" loading="lazy"></div>
+        <div class="slide"><img src="images/having_fun_recsys_2024_Bari.jpeg" alt="Having fun at RecSys 2024, Bari" loading="lazy"></div>
+        <div class="slide"><img src="images/AI_horizon_with_NGI_Enrichers_2025_Davos.jpeg" alt="Exploring AI horizons with the NGI Enrichers team, Davos, 2025" loading="lazy"></div>
+        <div class="slide"><img src="images/phd_defense_Padova_2025.jpeg" alt="Defending my Ph.D. thesis, Padova, 2025" loading="lazy"></div>
+        <div class="slide"><img src="images/group_photo_sony_STEF_2025_Tokyo.jpeg" alt="With the Sony STEF team, Tokyo, 2025" loading="lazy"></div>
+        <div class="slide"><img src="images/poster_presentation_recsys_2025_Prague.jpeg" alt="Poster presentation at RecSys 2025, Prague" loading="lazy"></div>
+      </div>
+      <button class="carousel-nav prev" aria-label="Previous slide">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="carousel-nav next" aria-label="Next slide">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+    <div class="carousel-dots" id="carousel-dots"></div>
+    <p class="carousel-caption" id="carousel-caption">Receiving the Best Doctoral Consortium Paper Award at AIxIA 2023, Rome</p>
+  </div>
+</section>
+
+<!-- ============================= -->
+<!-- Awards                          -->
+<!-- ============================= -->
+<section id="awards">
+  <div class="wrap reveal">
+    <span class="eyebrow-num">Recognition</span>
+    <h2 class="section-title">Awards &amp; recognition</h2>
+
+    <div class="award-list">
+      <div class="award">
+        <div class="award-year">2024</div>
+        <div class="award-title">NGI Enrichers Fellowship</div>
+        <div class="award-desc">Funded research visit at Rutgers University, NJ, USA</div>
+      </div>
+      <div class="award">
+        <div class="award-year">2023</div>
+        <div class="award-title">Best Doctoral Consortium Paper Award</div>
+        <div class="award-desc">AIxIA 2023</div>
+      </div>
+      <div class="award">
+        <div class="award-year">2016</div>
+        <div class="award-title">"Mille e una lode" Scholarship</div>
+        <div class="award-desc">University of Padova</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= -->
+<!-- Contact                         -->
+<!-- ============================= -->
+<section id="contact">
+  <div class="wrap reveal">
+    <h2 class="section-title">Get in touch</h2>
+    <p class="sub">tcarraro96@gmail.com &middot; Padova, Italy</p>
+    <div class="contact-icons">
+      <a href="mailto:tcarraro96@gmail.com" aria-label="Email">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+      </a>
+      <a href="https://github.com/tommasocarraro" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.2c0 4.49 2.87 8.3 6.84 9.64.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.72-2.78.62-3.37-1.37-3.37-1.37-.46-1.2-1.11-1.52-1.11-1.52-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.9 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.64-1.37-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 2.5-.35c.85 0 1.71.12 2.5.35 1.91-1.33 2.75-1.05 2.75-1.05.55 1.42.2 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.49A10.21 10.21 0 0 0 22 12.2C22 6.58 17.52 2 12 2z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/tommaso-carraro/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+      </a>
+    </div>
+    <p class="references-note">References available upon request.</p>
+  </div>
+</section>
+
+<footer>&copy; 2026 Tommaso Carraro</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Mobile nav toggle ---------- */
+  var navToggle = document.getElementById('nav-toggle');
+  var navLinks = document.getElementById('nav-links');
+  navToggle.addEventListener('click', function(){
+    var open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+  });
+  navLinks.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){ navLinks.classList.remove('open'); });
+  });
+
+  /* ---------- Scroll spy for nav highlighting ---------- */
+  var navAnchors = document.querySelectorAll('[data-nav]');
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section[id]'));
+  var spyObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        var id = entry.target.getAttribute('id');
+        navAnchors.forEach(function(a){
+          a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+  sections.forEach(function(s){ spyObserver.observe(s); });
+
+  /* ---------- Entrance reveal animations ---------- */
+  var revealEls = document.querySelectorAll('.reveal');
+  if(reduceMotion){
+    revealEls.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var revealObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(function(el){ revealObserver.observe(el); });
+  }
+
+  /* ---------- Terminal typing animation ---------- */
+  var phrases = [
+    'Applied AI Scientist.',
+    'Recommender Systems Researcher.',
+    'LLM & Agentic AI Builder.'
+  ];
+  var termEl = document.getElementById('terminal-text');
+
+  if(reduceMotion){
+    termEl.textContent = phrases[0];
+  } else {
+    (function typeLoop(){
+      var phraseIdx = 0, charIdx = 0, deleting = false;
+      var TYPE_MS = 38, DELETE_MS = 22, HOLD_MS = 1400, GAP_MS = 400;
+
+      function tick(){
+        var current = phrases[phraseIdx];
+        if(!deleting){
+          charIdx++;
+          termEl.textContent = current.slice(0, charIdx);
+          if(charIdx === current.length){
+            deleting = true;
+            setTimeout(tick, HOLD_MS);
+            return;
+          }
+          setTimeout(tick, TYPE_MS);
+        } else {
+          charIdx--;
+          termEl.textContent = current.slice(0, charIdx);
+          if(charIdx === 0){
+            deleting = false;
+            phraseIdx = (phraseIdx + 1) % phrases.length;
+            setTimeout(tick, GAP_MS);
+            return;
+          }
+          setTimeout(tick, DELETE_MS);
+        }
+      }
+      tick();
+    })();
+  }
+
+  /* ---------- Background particles ---------- */
+  if(!reduceMotion){
+    var field = document.getElementById('particles');
+    var COUNT = 28;
+    for(var i=0;i<COUNT;i++){
+      var p = document.createElement('div');
+      p.className = 'particle' + (i % 3 === 0 ? ' violet' : '');
+      p.style.left = (Math.random()*100) + 'vw';
+      p.style.top = (60 + Math.random()*40) + 'vh';
+      var dur = 14 + Math.random()*18;
+      p.style.animationDuration = dur + 's';
+      p.style.animationDelay = (Math.random()*dur) + 's';
+      field.appendChild(p);
+    }
+  }
+
+  /* ---------- Publications accordion ---------- */
+  document.querySelectorAll('.pub-head').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var pub = btn.closest('.pub');
+      var isOpen = pub.classList.contains('open');
+      document.querySelectorAll('.pub.open').forEach(function(p){
+        if(p !== pub){
+          p.classList.remove('open');
+          p.querySelector('.pub-head').setAttribute('aria-expanded', 'false');
+        }
+      });
+      pub.classList.toggle('open', !isOpen);
+      btn.setAttribute('aria-expanded', String(!isOpen));
+    });
+  });
+
+  /* ---------- Copy BibTeX ---------- */
+  document.querySelectorAll('.copy-bib').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var pub = btn.closest('.pub');
+      var bibtex = pub.getAttribute('data-bibtex');
+      var originalText = btn.textContent;
+
+      function showCopied(){
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(function(){
+          btn.textContent = originalText;
+          btn.classList.remove('copied');
+        }, 1600);
+      }
+
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(bibtex).then(showCopied).catch(function(){
+          fallbackCopy(bibtex, showCopied);
+        });
+      } else {
+        fallbackCopy(bibtex, showCopied);
+      }
+    });
+  });
+
+  function fallbackCopy(text, cb){
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try{ document.execCommand('copy'); }catch(err){}
+    document.body.removeChild(ta);
+    cb();
+  }
+
+  /* ---------- Carousel ---------- */
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var captions = [
+    'Receiving the Best Doctoral Consortium Paper Award at AIxIA 2023, Rome',
+    'Presenting my work at RecSys 2023, Singapore',
+    'Poster presentation at RecSys 2023, Singapore',
+    'Having fun at RecSys 2023, Singapore',
+    'NGI Enrichers Fellowship bootcamp, Rome, 2024',
+    'With Jhonatan in Times Square during the NGI Enrichers Fellowship, New York, 2024',
+    'Presenting at NeSy 2024, Barcelona',
+    'Having fun at RecSys 2024, Bari',
+    'Exploring AI horizons with the NGI Enrichers team, Davos, 2025',
+    'Defending my Ph.D. thesis, Padova, 2025',
+    'With the SONY team, Tokyo, 2025',
+    'Poster presentation at RecSys 2025, Prague'
+  ];
+  var dotsWrap = document.getElementById('carousel-dots');
+  var captionEl = document.getElementById('carousel-caption');
+  var current = 0;
+  var AUTOPLAY_MS = 4000;
+  var timer = null;
+
+  slides.forEach(function(_, i){
+    var dot = document.createElement('button');
+    dot.setAttribute('aria-label', 'Go to slide ' + (i+1));
+    if(i === 0) dot.classList.add('active');
+    dot.addEventListener('click', function(){ goTo(i); restart(); });
+    dotsWrap.appendChild(dot);
+  });
+  var dots = Array.prototype.slice.call(dotsWrap.children);
+
+  function goTo(idx){
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (idx + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    captionEl.textContent = captions[current];
+  }
+
+  function restart(){
+    if(timer) clearInterval(timer);
+    if(!reduceMotion){
+      timer = setInterval(function(){ goTo(current + 1); }, AUTOPLAY_MS);
+    }
+  }
+
+  document.querySelector('.carousel-nav.prev').addEventListener('click', function(){ goTo(current - 1); restart(); });
+  document.querySelector('.carousel-nav.next').addEventListener('click', function(){ goTo(current + 1); restart(); });
+
+  restart();
+})();
+</script>
+</body>
+</html>
