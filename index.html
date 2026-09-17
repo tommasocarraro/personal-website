@@ -495,9 +495,9 @@
   /* Projects                        */
   /* ============================= */
   .project-grid{
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap:18px;
+    display:flex;
+    flex-direction:column;
+    gap:22px;
   }
   .project-card{
     display:flex;
@@ -544,13 +544,37 @@
     border:1px solid var(--violet-dim);
     border-radius:999px;
     padding:3px 10px;
-    margin-bottom:12px;
+    margin-bottom:16px;
     width:fit-content;
+  }
+  .project-media{
+    position:relative;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:var(--bg-raised);
+    overflow:hidden;
+    margin-bottom:16px;
+  }
+  .project-media img{
+    width:100%;
+    height:auto;
+    display:block;
+  }
+  .project-media.placeholder{
+    min-height:120px;
+    padding:30px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .project-media.placeholder svg{
+    width:34px; height:34px;
+    color:var(--cyan-dim);
+    opacity:0.6;
   }
   .project-desc{
     color:var(--text-dim);
     font-size:0.88rem;
-    flex-grow:1;
   }
 
   /* ============================= */
@@ -862,6 +886,9 @@
           <svg class="project-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg>
         </div>
         <span class="project-tag">Neuro-Symbolic AI</span>
+        <div class="project-media">
+          <img src="images/ltntorch.png" alt="LTNTorch logic tensor network diagram" loading="lazy">
+        </div>
         <p class="project-desc">PyTorch port of Logic Tensor Networks, a neuro-symbolic framework that grounds first-order logic in neural networks through fuzzy semantics. I led the migration from the original TensorFlow codebase, making LTN easy to drop into modern PyTorch pipelines &mdash; it's now the version most of the neuro-symbolic community builds on.</p>
       </a>
 
@@ -871,6 +898,9 @@
           <svg class="project-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg>
         </div>
         <span class="project-tag">LLM Agents &middot; RecSys</span>
+        <div class="project-media placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
         <p class="project-desc">An end-to-end conversational recommendation agent for the Sony LIV streaming platform. It combines RAG over movie plots (Qdrant), SQL-based metadata lookup, and a collaborative-filtering backbone for personalization, orchestrated through tool calling so it can handle compound queries such as plot details plus a minimum rating. Reached PoC, was presented to stakeholders at Sony STEF Tokyo, secured further investment, and was published at ACM RecSys 2025.</p>
       </a>
 
@@ -880,6 +910,9 @@
           <svg class="project-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg>
         </div>
         <span class="project-tag">Personal project</span>
+        <div class="project-media">
+          <img src="images/zurich_agent.gif" alt="Zurich Guide Agent conversation demo" loading="lazy">
+        </div>
         <p class="project-desc">A conversational agent that recommends places and plans itineraries around Zurich based on real-time context (user location and time). It integrates with external APIs to retrieve places, weather, and to perform web searches. Built in my free time to experiment with agentic tool-use and retrieval outside of a research setting.</p>
       </a>
     </div>
@@ -1153,10 +1186,10 @@
 
     <div class="webinar-card">
       <div class="video-embed">
-        <iframe src="https://www.youtube.com/embed/eQqDRi1q3Zs" title="Recommendation Systems — Lecture 006" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+        <iframe src="https://www.youtube.com/embed/eQqDRi1q3Zs" title="Recommendation Systems — Lecture 006 of States of AI with Matteo Ciprian" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
       </div>
       <div class="webinar-info">
-        <div class="webinar-title">Recommendation Systems — Lecture 006</div>
+        <div class="webinar-title">Recommendation Systems — Lecture 006 of States of AI with Matteo Ciprian</div>
         <p class="webinar-desc">A guest lecture covering the foundations of Recommendation Systems &mdash; core concepts, data representation, matrix factorization, and a look at where the field is headed &mdash; presented as part of a lecture series while I was a third-year Ph.D. student at the University of Padova / Fondazione Bruno Kessler.</p>
       </div>
     </div>
