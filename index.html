@@ -491,6 +491,16 @@
   .pub-btn:hover{ border-color:var(--cyan); color:var(--cyan); }
   .pub-btn.copied{ border-color:var(--violet); color:var(--violet); }
 
+  .pub-thesis{ margin-top:32px; }
+  .pub-thesis-card{
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:var(--bg-card);
+    padding:20px;
+    margin-top:10px;
+  }
+  .pub-thesis-card .pub-abstract{ margin:10px 0 18px; }
+
   /* ============================= */
   /* Projects                        */
   /* ============================= */
@@ -1173,6 +1183,18 @@
           </div>
         </div>
       </article>
+    </div>
+
+    <div class="pub-thesis">
+      <span class="eyebrow-num">Doctoral thesis</span>
+      <div class="pub-thesis-card">
+        <div class="pub-title">Neuro-Symbolic Recommender Systems</div>
+        <div class="pub-meta"><span class="pub-highlight">Tommaso Carraro</span> &middot; Ph.D. Thesis, University of Padova &middot; 2025</div>
+        <p class="pub-abstract">My doctoral thesis on integrating Neuro-Symbolic computing with recommender systems, applying Logic Tensor Networks (LTN) to address data sparsity, cold-start, and explainability limitations through logical regularization, knowledge transfer, and cross-domain recommendation.</p>
+        <div class="pub-actions">
+          <a class="pub-btn" href="https://www.research.unipd.it/handle/11577/3551207" target="_blank" rel="noopener">Open Thesis</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
