@@ -555,7 +555,8 @@
     overflow:hidden;
     margin-bottom:16px;
   }
-  .project-media img{
+  .project-media img,
+  .project-media video{
     width:100%;
     height:auto;
     display:block;
@@ -911,7 +912,7 @@
         </div>
         <span class="project-tag">Personal project</span>
         <div class="project-media">
-          <img src="images/zurich_agent.gif" alt="Zurich Guide Agent conversation demo" loading="lazy">
+          <video src="images/zurich_agent.mp4" autoplay loop muted playsinline aria-label="Zurich Guide Agent conversation demo"></video>
         </div>
         <p class="project-desc">A conversational agent that recommends places and plans itineraries around Zurich based on real-time context (user location and time). It integrates with external APIs to retrieve places, weather, and to perform web searches. Built in my free time to experiment with agentic tool-use and retrieval outside of a research setting.</p>
       </a>
