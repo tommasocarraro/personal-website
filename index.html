@@ -178,8 +178,8 @@
 
   @media (max-width: 640px){
     .nav-links{
-      position:fixed;
-      top:53px; right:0;
+      position:absolute;
+      top:100%; right:0;
       flex-direction:column;
       background:var(--bg-raised);
       border-left:1px solid var(--line);
@@ -1356,7 +1356,7 @@
   /* ---------- Terminal typing animation ---------- */
   var phrases = [
     'Applied AI Scientist.',
-    'Recommender Systems Researcher.',
+    'RecSys Researcher.',
     'LLM & Agentic AI Builder.'
   ];
   var termEl = document.getElementById('terminal-text');
